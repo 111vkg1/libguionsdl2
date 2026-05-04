@@ -17,6 +17,40 @@ SDL_Color TextColor = {0,0,0,255};
 
 #endif
 
+struct GOS_Color
+{
+    uint8 r, g, b, a;
+    GOS_Color(uint8 r, uint8 g, uint8 b, uint8 a)
+    {
+	this->r = r;
+	this->g = g;
+	this->b = b;
+	this->a = a;
+    }
+    void SetAllTo(uint8 n)
+    {
+	this->r = n;
+	this->g = n;
+	this->b = n;
+	this->a = n;
+    }
+    void SetRandom()
+    {
+	this->r = 0;
+	this->g = 0;
+	this->b = 0;
+	this->a = 255; // Need to realise random method
+    }
+    std::string GetHex()
+    {
+	char buffer[10];
+	std::snprintf(buffer, sizeof(buffer), "#%02X%02X%02X%02X", this->r, this->g, this->b, this->a; // Not a final function
+	return std::string(buffer);
+    }
+    // Add method from HEX to rgba
+    
+}
+
 struct GOS_Element
 {
     bool Visible = 1;
@@ -182,10 +216,10 @@ struct GOS_PointButton : public GOS_StyledButton
     }
 };
 
-struct GOS_ColorSwitchButton : public GOS_StyledButton
+struct GOS_ColoredButton : public GOS_StyledButton
 {
-    // GOS_ColorSwitchButton is random color selector. Need to add a color class
-    GOS_ColorSwitchButton()
+    // GOS_ColoredButton is random color selector. Need to add a color class
+    GOS_ColoredButton()
     {
         Name = "GOS_ColorSwitchButton";
     };
