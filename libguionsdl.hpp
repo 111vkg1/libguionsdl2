@@ -92,6 +92,7 @@ struct GOS_Button : public GOS_Element
 
 struct GOS_StyledButton : public GOS_Button
 {
+    // GOS_StyledButton is GOS_Button with border
     short BorderSize = 3;
     GOS_StyledButton()
     {
@@ -134,6 +135,7 @@ struct GOS_StyledButton : public GOS_Button
 
 struct GOS_PointButton : public GOS_StyledButton
 {
+    //GOS_PointButton is equals radio button in html
     GOS_PointButton()
     {
         Name = "PointButton";
@@ -182,6 +184,7 @@ struct GOS_PointButton : public GOS_StyledButton
 
 struct GOS_ColorSwitchButton : public GOS_StyledButton
 {
+    // GOS_ColorSwitchButton is random color selector. Need to add a color class
     GOS_ColorSwitchButton()
     {
         Name = "GOS_ColorSwitchButton";
@@ -206,6 +209,7 @@ struct GOS_ColorSwitchButton : public GOS_StyledButton
 
 struct GOS_StyledBox : public GOS_Box
 {
+    // Is simple frame, that uses to decorate. Look like GOS_StyledButton
     short BorderSize = 3;
     GOS_StyledBox()
     {
@@ -225,6 +229,7 @@ struct GOS_StyledBox : public GOS_Box
 
 struct GOS_TextBox : public GOS_Box
 {
+    // Simple textbox for text printing
     GOS_TextBox()
     {
         Name = "TextBox";
@@ -252,6 +257,7 @@ struct GOS_TextBox : public GOS_Box
 
 struct GOS_TextInputBox : public GOS_Button
 {
+    // Input box for text and others. Need add parsing for elements
     GOS_TextInputBox(int id)
     {
         Name = "InputTextBox" + std::to_string(id);
@@ -281,6 +287,7 @@ struct GOS_TextInputBox : public GOS_Button
 
 struct GOS_MouseTrace : public GOS_Element
 {
+    // GOS_MouseTrace is custom mouce effect
     GOS_MouseTrace()
     {
         Name = "GOS_MouseTrace";
