@@ -1,5 +1,5 @@
 # **libguionsdl2 (GOS)**
-libguionsdl2 (GOS or guionsld) is
+libguionsdl2 (GOS or guionsdl) is
 GUI header library for SDL2. 
 Requares SDL2_ttf, SDL2, SDL2_image
 
