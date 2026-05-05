@@ -13,15 +13,52 @@ GOS_GUI maingui;
 bool isButtonActive = maingui.GetElementByName("Button")->Active;
 // Get element named "Button" and check is it active
 ```
-- Can get any element by position:
+- Get any element by position:
 ```
 isButtonActive = maingui.GetElementAt(50, 50)->Active;
 // Get element with position near x=50, y=50 and check is it active
 ```
-- Can erase any element by Name or Id:
+- Erase any element by Name or Id:
 ```
 maingui.EraseElmentByName("Button");
 // or
 maingui.EraseElementById(0);
 ```
+- Draw elements, thats stored:
+```
+maingui.Draw(renderer); // SDL_Renderer *
+```
+- Update elements logic:
+```
+maingui.Update(x, y, nulltpr); // Mouse x, mouse y, Uint32 event
+```
+- Get selected element:
+```
+std::string selectedName = maingui.GetSelected(x, y); // Mouse x, mouse y
+```
 
+### GOS_Element
+- Base interface element
+- Stores position, size, color, name, text and id
+- Methods:
+```
+GOS_Element *button = new GOS_Element();
+
+button->MouseOn(x, y); // Returns true or false
+button->Draw(renderer); // SDL_Renderer *
+button->SetColor(color); // SDL_Color *
+button->SetFace(rect); // SDL_Rect *
+button->GetName(); // Returns name of object
+```
+
+### GOS_Button && GOS_StyledButton
+- Inherits GOS_Element
+- Overrides:
+    - Draw() method shade if active
+    - MouseOn() method now save result to Active
+    - GOS_StyledButton have a border
+
+### GOS_Box && GOS_StyledBox
+- Inherits GOS_Element
+- Overrites:
+    - GOS_StyledBox have a border
