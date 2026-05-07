@@ -1,8 +1,6 @@
 #ifndef LIBGUIONSDL
 #define LIBGUIONSDL
 
-#define USETEXT
-
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_ttf.h>
 #include<vector>
@@ -122,7 +120,7 @@ struct GOS_Button : public GOS_Element
     }
     virtual bool MouseOn(int x, int y) override
     {
-        Active = (x >= Face.x && y >= Face.y && x == Face.x+Face.w && y <= Face.y+Face.h);
+        Active = (x >= Face.x && y >= Face.y && x <= Face.x+Face.w && y <= Face.y+Face.h);
         return Active;
     }
 };
@@ -153,7 +151,7 @@ struct GOS_StyledButton : public GOS_Button
             }
 
             SDL_RenderFillRect(_r, &Face);
-
+	    #ifdef USETEXT
             if(TextureCash.find(Name) == TextureCash.end()){
                 SDL_Surface* _s = TTF_RenderUTF8_Blended(Font, Name.c_str(), TextColor);
                 TextureCash[Name] = SDL_CreateTextureFromSurface(_r, _s);
@@ -166,10 +164,11 @@ struct GOS_StyledButton : public GOS_Button
                 SDL_Rect _t = {Face.x + (Face.w - int(Name.size())*12)/2, Face.y, int(Name.size())*12, Face.h};
                 SDL_RenderCopy(_r, TextureCash[Name], nullptr, &_t);
             }
+	    #endif
         }
     }
 };
-
+#ifdef USETEXT
 struct GOS_PointButton : public GOS_StyledButton
 {
     //GOS_PointButton is equals radio button in html
@@ -217,6 +216,7 @@ struct GOS_PointButton : public GOS_StyledButton
         }
     }
 };
+#endif
 
 struct GOS_ColoredButton : public GOS_StyledButton
 {
@@ -262,7 +262,7 @@ struct GOS_StyledBox : public GOS_Box
         }
     }
 };
-
+#ifdef USETEXT
 struct GOS_TextBox : public GOS_Box
 {
     // Simple textbox for text printing
@@ -320,7 +320,7 @@ struct GOS_TextInputBox : public GOS_Button
         }
     }
 };
-
+#endif
 struct GOS_MouseTrace : public GOS_Element
 {
     // GOS_MouseTrace is custom mouce effect
