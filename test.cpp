@@ -47,8 +47,8 @@ int main(int argc, char* argv[])
    	     }
 	}
 	gui.Update(event.button.x, event.button.y, event.type);
-	//if(gui.GetSelected(event.button.x, event.button.y) != "None")
-	    //std::cout << "Selected button: " << gui.GetSelected(event.button.x, event.button.y);
+	if(gui.GetSelected() != nullptr)
+	    std::cout << "Selected button: " << gui.GetSelected()->Name;
 	gui.Draw(renderer);
 	SDL_RenderPresent(renderer);
     } 

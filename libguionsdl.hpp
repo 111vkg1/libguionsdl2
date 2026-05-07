@@ -16,6 +16,8 @@ SDL_Color TextColor = {0,0,0,255};
 
 #endif
 
+#include<./GOS/GOS_Color.hpp>
+
 struct GOS_Color
 {
     int r, g, b, a;
@@ -52,38 +54,10 @@ struct GOS_Color
     }; 
 };
 
-struct GOS_Element
-{
-    bool Visible = 1;
-    std::string Name = "Element";
-    std::string Text = "Element";
-    int Id = 0;
-    bool Active = 0;
-    GOS_Color Color = {255,255,255,255};
-    SDL_Rect Face = {0,0,0,0};
-    virtual ~GOS_Element() {};
-    virtual bool MouseOn(int x, int y)
-    {
-        return x >= Face.x && y >= Face.y && x <= Face.x+Face.w && y <= Face.y+Face.h;
-    }
-    virtual void Draw(SDL_Renderer* _r)
-    {
-        SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
-        SDL_RenderFillRect(_r, &Face);
-    }
-    virtual void SetColor(GOS_Color* _c)
-    {
-        Color = *_c;
-    }
-    virtual void SetFace(SDL_Rect* _f)
-    {
-        Face = *_f;
-    }
-    virtual std::string GetName()
-    {
-        return Name;
-    }
-};
+#include<./GOS/GOS_Element.hpp>
+#include<./GOS/GOS_Box.hpp>
+#include<./GOS/GOS_Button.hpp>
+#include<./GOS/GOS_Text.hpp>
 
 struct GOS_Box : public GOS_Element
 {
@@ -275,17 +249,17 @@ struct GOS_TextBox : public GOS_Box
         if(Visible){
             SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
             SDL_RenderFillRect(_r, &Face);
-            if(TextureCash.find(Name) == TextureCash.end()){
-                SDL_Surface* _s = TTF_RenderUTF8_Blended_Wrapped(Font, Name.c_str(), TextColor, 0);
-                TextureCash[Name] = SDL_CreateTextureFromSurface(_r, _s);
+            if(TextureCash.find(Text) == TextureCash.end()){
+                SDL_Surface* _s = TTF_RenderUTF8_Blended_Wrapped(Font, Text.c_str(), TextColor, 0);
+                TextureCash[Text] = SDL_CreateTextureFromSurface(_r, _s);
                 SDL_FreeSurface(_s);
             }
-            if(int(Name.size())*12 >= Face.w){
-                SDL_RenderCopy(_r, TextureCash[Name], nullptr, &Face);
+            if(int(Text.size())*12 >= Face.w){
+                SDL_RenderCopy(_r, TextureCash[Text], nullptr, &Face);
             }
             else{
-                SDL_Rect _t = {Face.x + (Face.w - int(Name.size())*12)/2, Face.y, int(Name.size())*12, Face.h};
-                SDL_RenderCopy(_r, TextureCash[Name], nullptr, &_t);
+                SDL_Rect _t = {Face.x + (Face.w - int(Text.size())*12)/2, Face.y, int(Text.size())*12, Face.h};
+                SDL_RenderCopy(_r, TextureCash[Text], nullptr, &_t);
             }
         }
     }
@@ -366,17 +340,17 @@ struct GOS_GUI
             }
         }
     }
-    std::string GetSelected(int x, int y)
+    GOS_Element* GetSelected()
     {
         for(auto it = Childs.rbegin(); it != Childs.rend(); ++it) {
             auto* child = *it;
             if(child) {
-                if(child->MouseOn(x, y)){
-                    return child->GetName();
+                if(child->Active){
+                    return child;
                 }
             }
         }
-        return "None";
+        return nullptr;
     }
     void EraseElementByName(std::string name)
     {

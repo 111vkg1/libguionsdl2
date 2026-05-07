@@ -1,7 +1,9 @@
 
 *.log
-*.cbp
 *.tmp
-*.layout
 test
 SDL*
+*.secret
+*.dev
+.dev*
+dev*

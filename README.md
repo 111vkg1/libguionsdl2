@@ -32,9 +32,9 @@ maingui.Draw(renderer); // SDL_Renderer *
 ```
 maingui.Update(x, y, nulltpr); // Mouse x, mouse y, Uint32 event
 ```
-- Get selected element:
+- Get selected now element:
 ```
-std::string selectedName = maingui.GetSelected(x, y); // Mouse x, mouse y
+auto selected = maingui.GetSelected(); // Return pointer to GOS_Element
 ```
 
 ### GOS_Color
@@ -74,3 +74,26 @@ button->GetName(); // Returns name of object
 - Inherits GOS_Element
 - Overrites:
     - GOS_StyledBox have a border
+
+## USETEXT GOS_Elements
+### GOS_PointButton
+- Inherits GOS_StyledButton
+- If active -> Text is "v"
+- If inactive -> Text is "x"
+
+### GOS_TextBox
+- Inherits GOS_Box
+- Simple box with text
+- To edit text:
+```
+TextBox->Text = "New text"
+```
+
+### GOS_TextInputBox
+- Inherits GOS_Button
+- Need a id to init
+```
+GOS_TextInputBox *tib = new GOS_TextInputBox(1); // Replace 1 with id that need
+std::cout << tib->Name; // InputTextBox1
+std::cout << tib->Id; // 1
+```
