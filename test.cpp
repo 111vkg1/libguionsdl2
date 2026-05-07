@@ -1,26 +1,40 @@
 #include<iostream>
+#define USETEXT
 #include<libguionsdl.hpp>
 #include<SDL2-2.28.5/SDL.h>
+#include<SDL2_ttf-2.24.0/SDL2_ttf.h>
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Event event;
 
+TTF_Font *Font;
+
 int main(int argc, char* argv[])
 {
     SDL_Init(SDL_INIT_EVERYTHING);
+    TTF_Init();
+    Font = TTF_OpenFont("./Schiffbauer-Regular.otf", 20);
     window = SDL_CreateWindow("test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, 1, 0); 
     GOS_GUI gui;
+    
     GOS_StyledBox *box = new GOS_StyledBox();
     box->Face = {0, 0, 100, 100};
     box->Color = GOS_Color(255, 125, 255, 255);
+    
     GOS_StyledButton *button = new GOS_StyledButton();
     button->Face = {150, 0, 100, 50};
     button->Color = GOS_Color(100, 255, 255, 255);
+    button->Text = "Button";
+    
+    GOS_TextBox *text = new GOS_TextBox();
+    text->Face = {0, 150, 100, 50};
+    text->Color = GOS_Color(220, 220, 220, 255);
 
     gui.AddElement(box);
     gui.AddElement(button);
+    gui.AddElement(text);
     bool run = true;
     while(run) 
     {
@@ -33,8 +47,8 @@ int main(int argc, char* argv[])
    	     }
 	}
 	gui.Update(event.button.x, event.button.y, event.type);
-	if(gui.GetSelected(event.button.x, event.button.y) != "None")
-	    std::cout << "Selected button: " << gui.GetSelected(event.button.x, event.button.y);
+	//if(gui.GetSelected(event.button.x, event.button.y) != "None")
+	    //std::cout << "Selected button: " << gui.GetSelected(event.button.x, event.button.y);
 	gui.Draw(renderer);
 	SDL_RenderPresent(renderer);
     } 

@@ -152,17 +152,17 @@ struct GOS_StyledButton : public GOS_Button
 
             SDL_RenderFillRect(_r, &Face);
 	    #ifdef USETEXT
-            if(TextureCash.find(Name) == TextureCash.end()){
-                SDL_Surface* _s = TTF_RenderUTF8_Blended(Font, Name.c_str(), TextColor);
-                TextureCash[Name] = SDL_CreateTextureFromSurface(_r, _s);
+            if(TextureCash.find(Text) == TextureCash.end()){
+                SDL_Surface* _s = TTF_RenderUTF8_Blended(Font, Text.c_str(), TextColor);
+                TextureCash[Text] = SDL_CreateTextureFromSurface(_r, _s);
                 SDL_FreeSurface(_s);
             }
-            if(int(Name.size())*12 >= Face.w){
-                SDL_RenderCopy(_r, TextureCash[Name], nullptr, &Face);
+            if(int(Text.size())*12 >= Face.w){
+                SDL_RenderCopy(_r, TextureCash[Text], nullptr, &Face);
             }
             else{
-                SDL_Rect _t = {Face.x + (Face.w - int(Name.size())*12)/2, Face.y, int(Name.size())*12, Face.h};
-                SDL_RenderCopy(_r, TextureCash[Name], nullptr, &_t);
+                SDL_Rect _t = {Face.x + (Face.w - int(Text.size())*12)/2, Face.y, int(Text.size())*12, Face.h};
+                SDL_RenderCopy(_r, TextureCash[Text], nullptr, &_t);
             }
 	    #endif
         }
