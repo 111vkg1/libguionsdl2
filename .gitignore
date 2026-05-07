@@ -1,0 +1,7 @@
+
+*.log
+*.cbp
+*.tmp
+*.layout
+test
+SDL*

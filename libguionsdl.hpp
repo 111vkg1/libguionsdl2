@@ -8,6 +8,7 @@
 #include<vector>
 #include<map>
 #include<string>
+#include<random>
 
 #ifdef USETEXT
 
@@ -19,15 +20,8 @@ SDL_Color TextColor = {0,0,0,255};
 
 struct GOS_Color
 {
-    uint8 r, g, b, a;
-    GOS_Color(uint8 r, uint8 g, uint8 b, uint8 a)
-    {
-	this->r = r;
-	this->g = g;
-	this->b = b;
-	this->a = a;
-    }
-    void SetAllTo(uint8 n)
+    int r, g, b, a;
+    void SetAllTo(int n)
     {
 	this->r = n;
 	this->g = n;
@@ -36,20 +30,29 @@ struct GOS_Color
     }
     void SetRandom()
     {
-	this->r = 0;
-	this->g = 0;
-	this->b = 0;
-	this->a = 255; // Need to realise random method
+	std::mt19937 rng(std::random_device{}());
+	std::uniform_int_distribution<int> dist(0, 255);
+	this->r = dist(rng);
+	this->g = dist(rng);
+	this->b = dist(rng);
+    	this->a = 255;
     }
     std::string GetHex()
     {
 	char buffer[10];
-	std::snprintf(buffer, sizeof(buffer), "#%02X%02X%02X%02X", this->r, this->g, this->b, this->a; // Not a final function
+	std::snprintf(buffer, sizeof(buffer), "#%02X%02X%02X%02X", this->r, this->g, this->b, this->a); // Not a final function
 	return std::string(buffer);
     }
-    // Add method from HEX to rgba
-    
-}
+    // Need realese a Hex to rgba converter here
+    // .. 
+    GOS_Color(int r, int g, int b, int a)
+    {
+	this->r = r;
+	this->g = g;
+	this->b = b;
+	this->a = a;
+    }; 
+};
 
 struct GOS_Element
 {
@@ -58,7 +61,7 @@ struct GOS_Element
     std::string Text = "Element";
     int Id = 0;
     bool Active = 0;
-    SDL_Color Color = {255,255,255,255};
+    GOS_Color Color = {255,255,255,255};
     SDL_Rect Face = {0,0,0,0};
     virtual ~GOS_Element() {};
     virtual bool MouseOn(int x, int y)
@@ -70,7 +73,7 @@ struct GOS_Element
         SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
         SDL_RenderFillRect(_r, &Face);
     }
-    virtual void SetColor(SDL_Color* _c)
+    virtual void SetColor(GOS_Color* _c)
     {
         Color = *_c;
     }
@@ -119,7 +122,7 @@ struct GOS_Button : public GOS_Element
     }
     virtual bool MouseOn(int x, int y) override
     {
-        Active = (x >= Face.x && y >= Face.y && x <= Face.x+Face.w && y <= Face.y+Face.h);
+        Active = (x >= Face.x && y >= Face.y && x == Face.x+Face.w && y <= Face.y+Face.h);
         return Active;
     }
 };
@@ -194,7 +197,6 @@ struct GOS_PointButton : public GOS_StyledButton
             else{
                 SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
             }
-
             SDL_RenderFillRect(_r, &Face);
             if(Active){
                 if(TextureCash.find("v") == TextureCash.end()){
