@@ -1,4 +1,4 @@
-![logo](https://ibb.co/xSDK6KHv)
+![logo](https://imgfy.ru/ib/pmZIujYaQ1P2YFN_1778274443.webp)
 
 # **libguionsdl2 (GOS)**
 libguionsdl2 (GOS or guionsdl) is
