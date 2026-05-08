@@ -7,3 +7,5 @@ SDL*
 *.dev
 .dev*
 dev*
+*.otf
+*.ttf
