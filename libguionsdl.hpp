@@ -3,6 +3,7 @@
 
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_ttf.h>
+#include<SDL2/SDL_image.h>
 #include<vector>
 #include<map>
 #include<string>
@@ -22,6 +23,7 @@ SDL_Color TextColor = {0,0,0,255};
 #include<GOS/GOS_Button.hpp>
 #include<GOS/GOS_Text.hpp>
 #include<GOS/GOS_MouseUtils.hpp>
+#include<GOS/GOS_Textured.hpp>
 
 struct GOS_GUI
 {

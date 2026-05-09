@@ -1,4 +1,6 @@
-
+*.png
+*.jpg
+*.jpeg
 *.log
 *.tmp
 test
@@ -9,3 +11,4 @@ SDL*
 dev*
 *.otf
 *.ttf
+*.clst
