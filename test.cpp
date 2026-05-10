@@ -38,17 +38,26 @@ int main(int argc, char* argv[])
 	SDL_Surface* surf = IMG_Load("test2.png");
 	GOS_TexturedBox *texture = new GOS_TexturedBox();
 	texture->Face = {50, 200, 250, 250};
-	texture->Color.SetAllTo(255);
-	texture->Color.a = 0;
+	texture->Color.SetAllTo(50);
+	texture->Color.r = 255;
+	texture->Color.a = 255;
 	texture->BorderSize = 0;
 	texture->Texture = SDL_CreateTextureFromSurface(renderer, surf);
-	texture->RenderType = 's';
-	SDL_FreeSurface(surf);
+	texture->RenderType = 'l';
+	
+	GOS_TexturedButton *tb = new GOS_TexturedButton();
+	tb->Face = {0, 150, 100, 50};
+	tb->Color.SetAllTo(255);
+	tb->Color.r = 0;
+	tb->BorderSize = 5;
+	tb->Texture = texture->Texture;
+	tb->RenderType = 'c';
 
     gui.AddElement(box);
     gui.AddElement(button);
     gui.AddElement(text);
     gui.AddElement(texture);
+	gui.AddElement(tb);
 	bool run = true;
     while(run) 
     {
