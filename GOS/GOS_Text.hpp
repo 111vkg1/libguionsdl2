@@ -79,10 +79,9 @@ struct GOS_TextBox : public GOS_Box
 
 struct GOS_TextInputBox : public GOS_Button
 {
-    // Input box for text and others. Need add parsing for elements
     GOS_TextInputBox(int id)
     {
-        Name = "InputTextBox" + std::to_string(id);
+        Name = "TextInputBox";
         Text = "Input";
         Id = id;
     }
@@ -91,7 +90,8 @@ struct GOS_TextInputBox : public GOS_Button
         if(Visible){
             SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
             SDL_RenderFillRect(_r, &Face);
-            if(TextureCash.find(Text) == TextureCash.end()){
+            if(Text == "") return;
+			if(TextureCash.find(Text) == TextureCash.end()){
                 SDL_Surface* _s = TTF_RenderUTF8_Blended_Wrapped(Font, Text.c_str(), TextColor, 0);
                 TextureCash[Text] = SDL_CreateTextureFromSurface(_r, _s);
                 SDL_FreeSurface(_s);
@@ -105,6 +105,11 @@ struct GOS_TextInputBox : public GOS_Button
             }
         }
     }
+	bool MouseOn(int x, int y) override
+	{
+		Active = (x >= Face.x && x <= Face.x + Face.w) && (y >= Face.y && y <= Face.y + Face.h);
+		return Active;
+	}
 };
 #endif
 

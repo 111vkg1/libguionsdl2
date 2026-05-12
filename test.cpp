@@ -27,37 +27,45 @@ int main(int argc, char* argv[])
     box->Color = GOS_Color(255, 125, 255, 255);
     
     GOS_StyledButton *button = new GOS_StyledButton();
-    button->Face = {50, 0, 100, 50};
+    button->Face = {0, 50, 50, 50};
     button->Color = GOS_Color(100, 255, 255, 150);
     
     GOS_TextBox *text = new GOS_TextBox();
-    text->Face = {50, 150, 100, 50};
+    text->Face = {0, 150, 100, 50};
     text->Color = GOS_Color(220, 220, 220, 255);
 	text->Text = "Hello";
 	
 	SDL_Surface* surf = IMG_Load("test2.png");
 	GOS_TexturedBox *texture = new GOS_TexturedBox();
-	texture->Face = {50, 200, 250, 250};
+	texture->Face = {0, 250, 100, 50};
 	texture->Color.SetAllTo(50);
 	texture->Color.r = 255;
 	texture->Color.a = 255;
 	texture->BorderSize = 0;
 	texture->Texture = SDL_CreateTextureFromSurface(renderer, surf);
 	texture->RenderType = 'l';
+	SDL_FreeSurface(surf);
 	
 	GOS_TexturedButton *tb = new GOS_TexturedButton();
-	tb->Face = {0, 150, 100, 50};
+	tb->Face = {0, 350, 100, 50};
 	tb->Color.SetAllTo(255);
 	tb->Color.r = 0;
 	tb->BorderSize = 5;
 	tb->Texture = texture->Texture;
 	tb->RenderType = 'c';
 
+	GOS_TextInputBox *ti = new GOS_TextInputBox(1);
+	ti->Face = {0, 450, 100, 50};
+	ti->Color.SetAllTo(46);
+	ti->Color.b = 255;
+	ti->Text = "";
+
     gui.AddElement(box);
     gui.AddElement(button);
     gui.AddElement(text);
     gui.AddElement(texture);
 	gui.AddElement(tb);
+	gui.AddElement(ti);
 	bool run = true;
     while(run) 
     {
@@ -68,9 +76,10 @@ int main(int argc, char* argv[])
 	       		run = false; 
 		 		break;
    	    	}
-		}	
-		std::cout << SDL_GetError();
-		gui.Update(event.button.x, event.button.y, event.type);
+		}
+			
+//		std::cout << SDL_GetError() << event.text.text << std::endl;
+		gui.Update(event.button.x, event.button.y, event);
 		gui.Draw(renderer);
 		SDL_RenderPresent(renderer);
     } 

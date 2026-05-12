@@ -3,7 +3,7 @@
 # **libguionsdl2 (GOS)**
 libguionsdl2 (GOS or guionsdl) is
 GUI header library for SDL2. 
-Requares SDL2_ttf, SDL2, SDL2_image
+Requires SDL2_ttf, SDL2, SDL2_image
 
 ## GOS has a simple structure:
 ### GOS_GUI
@@ -77,7 +77,7 @@ button->GetName(); // Returns name of object
 - Overrites:
     - GOS_StyledBox have a border
 
-## USETEXT GOS_Elements
+## USETEXT Elements
 ### GOS_PointButton
 - Inherits GOS_StyledButton
 - If active -> Text is "v"
@@ -99,3 +99,24 @@ GOS_TextInputBox *tib = new GOS_TextInputBox(1); // Replace 1 with id that need
 std::cout << tib->Name; // InputTextBox1
 std::cout << tib->Id; // 1
 ```
+## USETEXTURES Elements
+### GOS_TexturedBox
+- Inherits GOS_StyledBox
+- Store Texture (SDL_Texture*), RenderType (char)
+```
+// Add texture to TexturedBox
+SDL_Surface* surf = IMG_Load("test.png");
+texturebox->Texture = SDL_CreateTextureFromSurface(renderer, surf);
+SDL_FreeSurface(surf);
+
+//Change RenderType of TexturedBox
+texturedbox->RenderType = 'c'; // centered texture with original size
+texturedbox->RenderType = 's'; // sized texture to Face size
+texturedbox->RenderType = 'b'; // texture on Face.x, Face.y with original size
+texturedbox->RenderType = 'l'; // or 'r' // original texture size with y centering and y or x alight
+```
+
+### GOS_TexturedButton
+- Inherits GOS_TexturedBox
+- Stores BorderSize (short)
+- RenderType and Texture equals to GOS_TexturedBox

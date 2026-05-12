@@ -22,7 +22,6 @@ SDL_Color TextColor = {0,0,0,255};
 #include<GOS/GOS_Box.hpp>
 #include<GOS/GOS_Button.hpp>
 #include<GOS/GOS_Text.hpp>
-#include<GOS/GOS_MouseUtils.hpp>
 #include<GOS/GOS_Textured.hpp>
 
 struct GOS_GUI
@@ -91,11 +90,21 @@ struct GOS_GUI
             }
         }
     }
-    void Update(int x, int y, Uint32& ev)
+    void Update(int x, int y, SDL_Event ev)
     {
         for(auto* child : Childs) {
             if(child) {
                 child->MouseOn(x, y);
+            }
+			if(child->Active)
+				std::cout << child->Name << std::endl;
+
+        }
+		//if(ev.type != SDL_TEXTINPUT || ev.text.text == nullptr) return;
+		for(auto* child : Childs) {
+            if(child->Name == "TextInputBox" && child->Active) {
+                child->Text += *ev.text.text;
+				std::cout << child->Text << std::endl;
             }
         }
     }
