@@ -53,8 +53,9 @@ Color.GetHex(); // Returns string with hex color value
 ### GOS_Element
 - Base interface element
 - Stores position, size, color, name, text and id
-- Methods:
 - Define USETEXT to use text elements
+- Defune USETEXTURES to use textured elements
+- Methods:
 ```
 GOS_Element *button = new GOS_Element();
 
@@ -76,7 +77,7 @@ button->GetName(); // Returns name of object
 - Inherits GOS_Element
 - Overrites:
     - GOS_StyledBox have a border
-
+---
 ## USETEXT Elements
 ### GOS_PointButton
 - Inherits GOS_StyledButton
@@ -96,9 +97,11 @@ TextBox->Text = "New text"
 - Need a id to init
 ```
 GOS_TextInputBox *tib = new GOS_TextInputBox(1); // Replace 1 with id that need
-std::cout << tib->Name; // InputTextBox1
+std::cout << tib->Name; // InputTextBox
 std::cout << tib->Id; // 1
+std::cout << tib->Text; // [Text that stored in InputBox]
 ```
+---
 ## USETEXTURES Elements
 ### GOS_TexturedBox
 - Inherits GOS_StyledBox
