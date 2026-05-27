@@ -22,7 +22,7 @@ isButtonActive = maingui.GetElementAt(50, 50)->Active;
 ```
 - Erase any element by Name or Id:
 ```
-maingui.EraseElmentByName("Button");
+maingui.EraseElementByName("Button");
 // or
 maingui.EraseElementById(0);
 ```
@@ -32,7 +32,7 @@ maingui.Draw(renderer); // SDL_Renderer *
 ```
 - Update elements logic:
 ```
-maingui.Update(x, y, nulltpr); // Mouse x, mouse y, Uint32 event
+maingui.Update(x, y, event); // Mouse x, mouse y, SDL_Event
 ```
 - Get selected now element:
 ```
@@ -61,7 +61,7 @@ GOS_Element *button = new GOS_Element();
 
 button->MouseOn(x, y); // Returns true or false
 button->Draw(renderer); // SDL_Renderer *
-button->SetColor(color); // SDL_Color *
+button->SetColor(color); // GOS_Color *
 button->SetFace(rect); // SDL_Rect *
 button->GetName(); // Returns name of object
 ```

@@ -2,8 +2,6 @@
 #define LIBGUIONSDL
 
 #include<SDL2/SDL.h>
-#include<SDL2/SDL_ttf.h>
-#include<SDL2/SDL_image.h>
 #include<vector>
 #include<map>
 #include<string>
@@ -11,6 +9,7 @@
 
 #ifdef USETEXT
 
+#include<SDL2/SDL_ttf.h>
 extern TTF_Font *Font;
 std::map<std::string, SDL_Texture*> TextureCash;
 SDL_Color TextColor = {0,0,0,255};
@@ -21,14 +20,23 @@ SDL_Color TextColor = {0,0,0,255};
 #include<GOS/GOS_Element.hpp>
 #include<GOS/GOS_Box.hpp>
 #include<GOS/GOS_Button.hpp>
-#include<GOS/GOS_Text.hpp>
-#include<GOS/GOS_Textured.hpp>
 
+#ifdef USETEXT
+
+#include<SDL2/SDL_image.h>
+#include<GOS/GOS_Text.hpp>
+
+#endif // USETEXT
+
+#ifdef USETEXTURES
+#include<GOS/GOS_Textured.hpp>
+#endif
 struct GOS_GUI
 {
     bool Visible = 1;
     SDL_Rect Face = {0,0,0,0};
     std::vector<GOS_Element*> Childs;
+	int RepeatTicks = 250;
 
     GOS_GUI() = default;
 
@@ -96,17 +104,40 @@ struct GOS_GUI
             if(child) {
                 child->MouseOn(x, y);
             }
-			if(child->Active)
-				std::cout << child->Name << std::endl;
-
         }
-		//if(ev.type != SDL_TEXTINPUT || ev.text.text == nullptr) return;
+		#ifdef USETEXT
+		if(ev.type == SDL_KEYDOWN && ev.key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
+        	for(auto* child : Childs) {
+            	if(child) {
+                	GOS_TextInputBox* inputBox = dynamic_cast<GOS_TextInputBox*>(child);
+                	if(inputBox && !inputBox->Text.empty()) {
+                		int now = SDL_GetTicks();
+       		     		if(now - inputBox->LastCharTick >= RepeatTicks) {
+                			inputBox->Text.pop_back();
+                			inputBox->LastCharTick = now;
+            	    		inputBox->LastChar = '\b';
+            			}			
+					}
+            	}
+        	}
+    	}
+		if(ev.type != SDL_TEXTINPUT) return;
 		for(auto* child : Childs) {
-            if(child->Name == "TextInputBox" && child->Active) {
-                child->Text += *ev.text.text;
-				std::cout << child->Text << std::endl;
-            }
-        }
+			GOS_TextInputBox* inputBox = dynamic_cast<GOS_TextInputBox*>(child);
+            if(inputBox && inputBox->Name == "TextInputBox") {
+            	int now = SDL_GetTicks();
+            	if(inputBox->LastChar != ev.text.text[0]) {
+                	inputBox->Text += ev.text.text;
+                	inputBox->LastChar = ev.text.text[0];
+                	inputBox->LastCharTick = now;
+            	} 
+            	else if(now - inputBox->LastCharTick >= RepeatTicks) {
+                	inputBox->Text += ev.text.text;
+                	inputBox->LastCharTick = now;
+            	}			
+        	}
+		}
+		#endif
     }
     GOS_Element* GetElementAt(int x, int y)
     {

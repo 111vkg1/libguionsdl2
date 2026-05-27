@@ -79,6 +79,8 @@ struct GOS_TextBox : public GOS_Box
 
 struct GOS_TextInputBox : public GOS_Button
 {
+	char LastChar = ' ';
+	int LastCharTick = -150;
     GOS_TextInputBox(int id)
     {
         Name = "TextInputBox";
@@ -87,22 +89,21 @@ struct GOS_TextInputBox : public GOS_Button
     }
     virtual void Draw(SDL_Renderer* _r) override
     {
-        if(Visible){
-            SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
-            SDL_RenderFillRect(_r, &Face);
-            if(Text == "") return;
-			if(TextureCash.find(Text) == TextureCash.end()){
-                SDL_Surface* _s = TTF_RenderUTF8_Blended_Wrapped(Font, Text.c_str(), TextColor, 0);
-                TextureCash[Text] = SDL_CreateTextureFromSurface(_r, _s);
-                SDL_FreeSurface(_s);
-            }
-            if(int(Text.size())*12 >= Face.w){
-                SDL_RenderCopy(_r, TextureCash[Text], nullptr, &Face);
-            }
-            else{
-                SDL_Rect _t = {Face.x + (Face.w - int(Text.size())*12)/2, Face.y, int(Text.size())*12, Face.h};
-                SDL_RenderCopy(_r, TextureCash[Text], nullptr, &_t);
-            }
+        if(!Visible) return;
+        SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
+        SDL_RenderFillRect(_r, &Face);
+        if(Text == "") return;
+		if(TextureCash.find(Text) == TextureCash.end()){
+            SDL_Surface* _s = TTF_RenderUTF8_Blended_Wrapped(Font, Text.c_str(), TextColor, 0);
+            TextureCash[Text] = SDL_CreateTextureFromSurface(_r, _s);
+            SDL_FreeSurface(_s);
+        }
+        if(int(Text.size())*12 >= Face.w){
+            SDL_RenderCopy(_r, TextureCash[Text], nullptr, &Face);
+        }
+        else{
+            SDL_Rect _t = {Face.x + (Face.w - int(Text.size())*12)/2, Face.y, int(Text.size())*12, Face.h};
+            SDL_RenderCopy(_r, TextureCash[Text], nullptr, &_t);
         }
     }
 	bool MouseOn(int x, int y) override
