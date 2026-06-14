@@ -5,7 +5,7 @@ struct GOS_Color
 {
     int r, g, b, a;
     void SetAllTo(int n)
-    {
+    	{
 	this->r = n;
 	this->g = n;
 	this->b = n;	
@@ -26,7 +26,7 @@ struct GOS_Color
     }
     GOS_Color(int r, int g, int b, int a)
     {
-	this->r = r;
+		this->r = r;
 	this->g = g;
 	this->b = b;
 	this->a = a;

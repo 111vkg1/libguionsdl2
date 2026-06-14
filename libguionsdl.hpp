@@ -7,6 +7,21 @@
 #include<string>
 #include<random>
 
+class IdAlreadyExistsException : public std::exception
+{
+	private:
+		std::string message;
+
+	public:
+		explicit IdAlreadyExistException(int id)
+			: message("Id " + std::to_string(id) + " alredy exists!") {}
+
+		const char* what() const noexcept override
+		{
+			return message.c_str();
+		}
+};
+
 #ifdef USETEXT
 
 #include<SDL2/SDL_ttf.h>
@@ -35,34 +50,34 @@ struct GOS_GUI
 {
     bool Visible = 1;
     SDL_Rect Face = {0,0,0,0};
-    std::vector<GOS_Element*> Childs;
+    std::vector<std::unique_ptr<GOS_Element>> Childs;
 	int RepeatTicks = 250;
 
     GOS_GUI() = default;
 
-    ~GOS_GUI()
-    {
-        for(auto* child : Childs) {
-            delete child;
-        }
-    }
-    GOS_GUI(const GOS_GUI&) = delete;
-    GOS_GUI& operator=(const GOS_GUI&) = delete;
-    GOS_GUI(GOS_GUI&& other) noexcept : Childs(std::move(other.Childs)) {}
-    GOS_GUI& operator=(GOS_GUI&& other) noexcept
-    {
-        Childs = std::move(other.Childs);
-        return *this;
-    }
+    ~GOS_GUI() = default;
     void AddElement(GOS_Element* element)
     {
-        Childs.push_back(element);
+		element->Id = Childs.size();
+        Childs.push_back(std::unique_ptr<GOS_Element>(element));
     }
+	void AddElementWithId(GOS_Element* element, int newId = -1)
+	{
+		std::unique_ptr<GOS_Element> ptr(element);
+		if(newId > -1)
+			ptr->Id = newId;
+		if(this->GetElementById(ptr->Id) == nullptr){
+			Childs.push_back(std::move(ptr));
+		}
+		else{
+			throw IdAlreadyExsistsException(ptr->Id);
+		}
+	}
     void Draw(SDL_Renderer* _r)
     {
         if(!Visible)
             return;
-        for(auto* child : Childs) {
+        for(auto& child : Childs) {
             if(child && child->Visible) {
                 child->Draw(_r);
             }
@@ -71,10 +86,10 @@ struct GOS_GUI
     GOS_Element* GetSelected()
     {
         for(auto it = Childs.rbegin(); it != Childs.rend(); ++it) {
-            auto* child = *it;
+            auto child = *it;
             if(child) {
                 if(child->Active){
-                    return child;
+                    return child.get();
                 }
             }
         }
@@ -85,7 +100,6 @@ struct GOS_GUI
         for(size_t it = 0; it < Childs.size(); it++) {
             if(Childs[it] && Childs[it]->GetName() == name) {
                 Childs.erase(Childs.begin() + it);
-                //delete Childs[it];
             }
         }
     }
@@ -93,23 +107,22 @@ struct GOS_GUI
     {
         for(size_t it = 0; it < Childs.size(); it++) {
             if(Childs[it] && Childs[it]->Id == id) {
-                delete Childs[it];
                 Childs.erase(Childs.begin() + it);
             }
         }
     }
     void Update(int x, int y, SDL_Event ev)
     {
-        for(auto* child : Childs) {
+        for(auto& child : Childs) {
             if(child) {
                 child->MouseOn(x, y);
             }
         }
 		#ifdef USETEXT
 		if(ev.type == SDL_KEYDOWN && ev.key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
-        	for(auto* child : Childs) {
+        	for(auto& child : Childs) {
             	if(child) {
-                	GOS_TextInputBox* inputBox = dynamic_cast<GOS_TextInputBox*>(child);
+                	auto* inputBox = dynamic_cast<GOS_TextInputBox*>(child.get());
                 	if(inputBox && !inputBox->Text.empty()) {
                 		int now = SDL_GetTicks();
        		     		if(now - inputBox->LastCharTick >= RepeatTicks) {
@@ -122,8 +135,8 @@ struct GOS_GUI
         	}
     	}
 		if(ev.type != SDL_TEXTINPUT) return;
-		for(auto* child : Childs) {
-			GOS_TextInputBox* inputBox = dynamic_cast<GOS_TextInputBox*>(child);
+		for(auto& child : Childs) {
+			GOS_TextInputBox* inputBox = dynamic_cast<GOS_TextInputBox*>(child.get());
             if(inputBox && inputBox->Name == "TextInputBox") {
             	int now = SDL_GetTicks();
             	if(inputBox->LastChar != ev.text.text[0]) {
@@ -141,27 +154,27 @@ struct GOS_GUI
     }
     GOS_Element* GetElementAt(int x, int y)
     {
-        for(auto* child : Childs) {
+        for(auto& child : Childs) {
             if(child && child->Visible && child->MouseOn(x, y)) {
-                return child;
+                return child.get();
             }
         }
         return nullptr;
     }
     GOS_Element* GetElementByName(std::string Name)
     {
-        for(auto* child : Childs) {
+        for(auto& child : Childs) {
             if(child && child->Visible && child->Name == Name) {
-                return child;
+                return child.get();
             }
         }
         return nullptr;
     }
     GOS_Element* GetElementById(int id)
     {
-        for(auto* child : Childs) {
+        for(auto& child : Childs) {
             if(child && child->Id == id) {
-                return child;
+                return child.get();
             }
         }
         return nullptr;

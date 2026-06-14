@@ -2,6 +2,15 @@
 #ifndef GOS_TEXTURED
 #define GOS_TEXTURED
 
+enum class GOS_RenderType
+{
+	Centered,
+	Stretched,
+	Standart,
+	Left,
+	Right
+};
+
 struct GOS_TexturedBox : public GOS_StyledBox
 {
 	GOS_TexturedBox()
@@ -9,8 +18,9 @@ struct GOS_TexturedBox : public GOS_StyledBox
 		Name = "Textured box";
 	}
 	SDL_Texture* Texture;
-	char RenderType = 's'; // strach (s), base (b), centered (c), left (l), right (r)
+	GOS_RenderType RenderType = GOS_RenderType::Centered;
 	bool Active = false;
+
 	virtual void Draw(SDL_Renderer* _r) override
 	{
 		if(!Visible) return;
@@ -19,12 +29,12 @@ struct GOS_TexturedBox : public GOS_StyledBox
 		SDL_RenderFillRect(_r, &BorderFrame);
 		if(Texture == nullptr) return;
 		switch(RenderType){
-			case 's':
+			case GOS_RenderType::Stretched:
 			{	
 				SDL_RenderCopy(_r, Texture, NULL, &Face);
 				break;
 			}
-			case 'b':
+			case GOS_RenderType::Standart:
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
@@ -32,7 +42,7 @@ struct GOS_TexturedBox : public GOS_StyledBox
 				SDL_RenderCopy(_r, Texture, NULL, &TextureFace);
 				break;
 			}
-			case 'c':	
+			case GOS_RenderType::Centered:	
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
@@ -46,7 +56,7 @@ struct GOS_TexturedBox : public GOS_StyledBox
 				SDL_RenderCopy(_r, Texture, NULL, &TextureFace);
 				break;
 			}
-			case 'r':
+			case GOS_RenderType::Right:
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
@@ -60,7 +70,7 @@ struct GOS_TexturedBox : public GOS_StyledBox
 				break;
 
 			}
-			case 'l':
+			case GOS_RenderType::Left:
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
@@ -110,12 +120,12 @@ struct GOS_TexturedButton : public GOS_TexturedBox
 		SDL_RenderFillRect(_r, &Face);
 		if(Texture == nullptr) return;
 		switch(RenderType){
-			case 's':
+			case GOS_RenderType::Stretched: 
 			{	
 				SDL_RenderCopy(_r, Texture, NULL, &Face);
 				break;
 			}
-			case 'b':
+			case GOS_RenderType::Standart:
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
@@ -123,7 +133,7 @@ struct GOS_TexturedButton : public GOS_TexturedBox
 				SDL_RenderCopy(_r, Texture, NULL, &TextureFace);
 				break;
 			}
-			case 'c':	
+			case GOS_RenderType::Centered:	
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
@@ -137,7 +147,7 @@ struct GOS_TexturedButton : public GOS_TexturedBox
 				SDL_RenderCopy(_r, Texture, NULL, &TextureFace);
 				break;
 			}
-			case 'r':
+			case GOS_RenderType::Right:
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
@@ -150,7 +160,7 @@ struct GOS_TexturedButton : public GOS_TexturedBox
 				SDL_RenderCopy(_r, Texture, NULL, &TextureFace);
 				break;
 			}
-			case 'l':
+			case GOS_RenderType::Left:
 			{
 				int TextureW, TextureH;
 				SDL_QueryTexture(Texture, NULL, NULL, &TextureW, &TextureH);
