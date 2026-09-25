@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	texture->Color.a = 255;
 	texture->BorderSize = 0;
 	texture->Texture = SDL_CreateTextureFromSurface(renderer, surf);
-	texture->RenderType = 'l';
+	texture->RenderType = GOS_RenderType::Left;
 	SDL_FreeSurface(surf);
 	
 	GOS_TexturedButton *tb = new GOS_TexturedButton();
@@ -52,20 +52,41 @@ int main(int argc, char* argv[])
 	tb->Color.r = 0;
 	tb->BorderSize = 5;
 	tb->Texture = texture->Texture;
-	tb->RenderType = 'c';
+	tb->RenderType = GOS_RenderType::Centered;
 
 	GOS_TextInputBox *ti = new GOS_TextInputBox(1);
 	ti->Face = {0, 450, 100, 50};
 	ti->Color.SetAllTo(46);
 	ti->Color.b = 255;
 	ti->Text = "";
+	
+	GOS_OpenMenu *om = new GOS_OpenMenu();
+	om->Face = {150, 50, 100, 50};
+	om->OpenedFace = {150, 50, 100, 150};
+	om->Color.SetAllTo(150);
+	GOS_Box *om_bx= new GOS_Box();
+	om_bx->Face = {150, 100, 100, 50};
+	om_bx->Color.SetAllTo(45);
+	om_bx->Visible = false;
+	om->AddElement(om_bx);
 
-    gui.AddElement(box);
+	GOS_ScrollingMenu *sm = new GOS_ScrollingMenu();
+	sm->Face = {250, 50, 100, 200};
+	sm->Color.SetAllTo(75);
+	GOS_Box *sm_bx = new GOS_Box();
+	sm_bx->Face = {250, 50, 100, 50};
+	sm_bx->Color.SetAllTo(35);
+	sm_bx->Color.g = 255;
+	sm->AddElement(sm_bx);
+
+	gui.AddElement(box);
     gui.AddElement(button);
     gui.AddElement(text);
     gui.AddElement(texture);
 	gui.AddElement(tb);
 	gui.AddElement(ti);
+	gui.AddElement(om);
+	gui.AddElement(sm);
 	bool run = true;
     while(run) 
     {
@@ -76,8 +97,10 @@ int main(int argc, char* argv[])
 	       		run = false; 
 		 		break;
    	    	}
+			int mx, my;
+    		SDL_GetMouseState(&mx, &my);
+			gui.Update(mx, my, event);
 		}
-		gui.Update(event.button.x, event.button.y, event);
 		gui.Draw(renderer);
 		SDL_RenderPresent(renderer);
     } 

@@ -6,6 +6,8 @@
 #include<map>
 #include<string>
 #include<random>
+#include<memory>
+#include<stdexcept>
 
 class IdAlreadyExistsException : public std::exception
 {
@@ -13,8 +15,8 @@ class IdAlreadyExistsException : public std::exception
 		std::string message;
 
 	public:
-		explicit IdAlreadyExistException(int id)
-			: message("Id " + std::to_string(id) + " alredy exists!") {}
+		explicit IdAlreadyExistsException(int id)
+			: message("Id " + std::to_string(id) + " already exists!") {}
 
 		const char* what() const noexcept override
 		{
@@ -46,6 +48,9 @@ SDL_Color TextColor = {0,0,0,255};
 #ifdef USETEXTURES
 #include<GOS/GOS_Textured.hpp>
 #endif
+
+#include<GOS/GOS_Menu.hpp>
+
 struct GOS_GUI
 {
     bool Visible = 1;
@@ -70,7 +75,7 @@ struct GOS_GUI
 			Childs.push_back(std::move(ptr));
 		}
 		else{
-			throw IdAlreadyExsistsException(ptr->Id);
+			throw IdAlreadyExistsException(ptr->Id);
 		}
 	}
     void Draw(SDL_Renderer* _r)
@@ -86,7 +91,7 @@ struct GOS_GUI
     GOS_Element* GetSelected()
     {
         for(auto it = Childs.rbegin(); it != Childs.rend(); ++it) {
-            auto child = *it;
+            auto& child = *it;
             if(child) {
                 if(child->Active){
                     return child.get();
@@ -115,7 +120,7 @@ struct GOS_GUI
     {
         for(auto& child : Childs) {
             if(child) {
-                child->MouseOn(x, y);
+                child->Update(x, y, ev);
             }
         }
 		#ifdef USETEXT

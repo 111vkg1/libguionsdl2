@@ -22,9 +22,12 @@ struct GOS_Button : public GOS_Element
             SDL_RenderFillRect(_r, &Face);
         }
     }
+	virtual void Update(int x, int y, SDL_Event ev) override
+	{
+        Active = (x >= Face.x && y >= Face.y && x <= Face.x+Face.w && y <= Face.y+Face.h);
+	}
     virtual bool MouseOn(int x, int y) override
     {
-        Active = (x >= Face.x && y >= Face.y && x <= Face.x+Face.w && y <= Face.y+Face.h);
         return Active;
     }
 };

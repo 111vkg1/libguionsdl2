@@ -106,11 +106,6 @@ struct GOS_TextInputBox : public GOS_Button
             SDL_RenderCopy(_r, TextureCash[Text], nullptr, &_t);
         }
     }
-	bool MouseOn(int x, int y) override
-	{
-		Active = (x >= Face.x && x <= Face.x + Face.w) && (y >= Face.y && y <= Face.y + Face.h);
-		return Active;
-	}
 };
 #endif
 
