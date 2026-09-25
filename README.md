@@ -66,6 +66,32 @@ button->SetFace(rect); // SDL_Rect *
 button->GetName(); // Returns name of object
 ```
 
+### GOS_Menu
+- Inherits GOS_Element
+- Store std::vector<std::unique_ptr<GOS_Element>>
+- Methods:
+```
+menu->AddElement(element); // Pushs GOS_Element* in menu
+menu->GetActiveId(); // Returns first active`s element id
+```
+
+### GOS_ScrollingMenu
+- Ingerits GOS_Menu
+- Scrolling elements by mouse button
+
+### GOS_OpenMenu
+- Inherits GOS_Menu
+- Clicking like GOS_Button
+- When active:
+	Drawing 'OpenedFace' and childs (std::unique_ptr<GOS_Element>)
+- When inactive:
+	Look like GOS_Button
+- Methods:
+```
+omenu->Open(); // Turn active
+omenu->Close(); // Turn inactive
+```
+
 ### GOS_Button && GOS_StyledButton
 - Inherits GOS_Element
 - Overrides:
@@ -89,7 +115,7 @@ button->GetName(); // Returns name of object
 - Simple box with text
 - To edit text:
 ```
-TextBox->Text = "New text"
+TextBox->Text = "New text";
 ```
 
 ### GOS_TextInputBox
@@ -113,10 +139,10 @@ texturebox->Texture = SDL_CreateTextureFromSurface(renderer, surf);
 SDL_FreeSurface(surf);
 
 //Change RenderType of TexturedBox
-texturedbox->RenderType = 'c'; // centered texture with original size
-texturedbox->RenderType = 's'; // sized texture to Face size
-texturedbox->RenderType = 'b'; // texture on Face.x, Face.y with original size
-texturedbox->RenderType = 'l'; // or 'r' // original texture size with y centering and y or x alight
+texturedbox->RenderType = GOS_RenderType::Centered; // centered texture with original size
+texturedbox->RenderType = GOS_RenderType::Stretched; // sized texture to Face size
+texturedbox->RenderType = GOS_RenderType::Standart; // texture on Face.x, Face.y with original size
+texturedbox->RenderType = GOS_RenderType::Left; // or GOS_RenderType::Right // original texture size with y centering and y or x alight
 ```
 
 ### GOS_TexturedButton
