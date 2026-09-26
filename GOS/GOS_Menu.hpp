@@ -60,13 +60,71 @@ struct GOS_ScrollingMenu : public GOS_Menu
 		}
 		this->Active = (x >= Face.x && y >= Face.y && x <= Face.x+Face.w && y < Face.y+Face.h);
 		if(ev.type == SDL_MOUSEWHEEL && this->Active){
+			if(ev.wheel.y < 0 && !Childs.empty() && Childs.back()->Face.y+Childs.back()->Face.h <= Face.y+Face.h) return;
+			if(ev.wheel.y > 0 && !Childs.empty() && Childs.front()->Face.y >= Face.y) return;
 			for(auto& child : this->Childs){
-				if(ev.wheel.y > 0 && !Childs.empty() && Childs.front()->Face.y <= Face.y) break;
-				if(ev.wheel.y < 0 && !Childs.empty() && Childs.back()->Face.y + Childs.back()->Face.h >= Face.y + Face.h) break;
-				if(child){
-					child->Face.y -= ev.wheel.y * SCROLL_STEP;
-				}
+				if(!child) return;
+				child->Face.y += ev.wheel.y * SCROLL_STEP;
 			}
+		}
+	}
+	virtual void Draw(SDL_Renderer* _r) override
+	{
+		if(!Visible) return;
+		SDL_SetRenderDrawColor(_r, Color.r, Color.g, Color.b, Color.a);
+		SDL_RenderFillRect(_r, &Face);
+	
+		for(auto& child : this->Childs){
+			if(child->Face.y < this->Face.y && child->Face.y+child->Face.h > this->Face.y){
+				SDL_Rect drawable = {child->Face.x, 
+					this->Face.y,
+					child->Face.w,
+					(child->Face.y+child->Face.h) - this->Face.y};
+				SDL_SetRenderDrawColor(_r, child->Color.r, child->Color.g, child->Color.b, child->Color.a);
+				SDL_RenderFillRect(_r, &drawable);
+			} else if(child->Face.y+child->Face.h > this->Face.y+this->Face.h && child->Face.y < this->Face.y+this->Face.h){
+				SDL_Rect drawable = {child->Face.x, 
+					child->Face.y,
+					child->Face.w,
+					(this->Face.h) - (child->Face.y - this->Face.y)};
+				SDL_SetRenderDrawColor(_r, child->Color.r, child->Color.g, child->Color.b, child->Color.a);
+				SDL_RenderFillRect(_r, &drawable);
+			} else if(child->Face.y >= this->Face.y && child->Face.y+child->Face.h <= this->Face.y+this->Face.h) {
+				child->Draw(_r);
+			} else {
+				continue;
+			}
+		}
+		//Scrollbar
+		if(Childs.empty()) return;
+		int content_top = Childs.front()->Face.y;
+    	int content_bottom = Childs.back()->Face.y + Childs.back()->Face.h;
+   		int content_height = content_bottom - content_top;
+    
+    	SDL_Rect scrl_bar_bg = {
+        	this->Face.x + (this->Face.w - 5),
+        	this->Face.y,
+        	5,
+        	this->Face.h
+    	};
+    	SDL_SetRenderDrawColor(_r, this->Color.r+30, this->Color.g+30, this->Color.b+30, this->Color.a);
+    	SDL_RenderFillRect(_r, &scrl_bar_bg);
+    
+    	if (content_height > Face.h) {
+        	int scrolled = Face.y - content_top;
+        	float progress = (float)scrolled / (content_height - Face.h);
+        	int thumb_h = (int)((float)Face.h / content_height * Face.h);
+        	if (thumb_h < 20) thumb_h = 20;
+        	if (thumb_h > Face.h) thumb_h = Face.h;
+        	int thumb_y = Face.y + (int)(progress * (Face.h - thumb_h));
+        	SDL_Rect scrl_bar = {
+            	this->Face.x + (this->Face.w - 5),
+            	thumb_y,
+            	5,
+            	thumb_h
+        	};
+        	SDL_SetRenderDrawColor(_r, this->Color.r-30, this->Color.g-30, this->Color.b-30, this->Color.a);
+        	SDL_RenderFillRect(_r, &scrl_bar);		
 		}
 	}
 };

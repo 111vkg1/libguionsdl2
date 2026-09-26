@@ -71,13 +71,23 @@ int main(int argc, char* argv[])
 	om->AddElement(om_bx);
 
 	GOS_ScrollingMenu *sm = new GOS_ScrollingMenu();
-	sm->Face = {250, 50, 100, 200};
+	sm->Face = {250, 50, 125, 75};
 	sm->Color.SetAllTo(75);
 	GOS_Box *sm_bx = new GOS_Box();
 	sm_bx->Face = {250, 50, 100, 50};
 	sm_bx->Color.SetAllTo(35);
 	sm_bx->Color.g = 255;
 	sm->AddElement(sm_bx);
+	GOS_Box *sm_bx1 = new GOS_Box();
+	sm_bx1->Face = {250, 100, 100, 50};
+	sm_bx1->Color.SetAllTo(50);
+	sm_bx1->Color.b = 255;
+	sm->AddElement(sm_bx1);
+	GOS_Box *sm_bx2 = new GOS_Box();
+	sm_bx2->Face = {250, 150, 100, 50};
+	sm_bx2->Color.SetAllTo(100);
+	sm_bx2->Color.r = 255;
+	sm->AddElement(sm_bx2);
 
 	gui.AddElement(box);
     gui.AddElement(button);
