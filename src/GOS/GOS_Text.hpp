@@ -4,7 +4,6 @@
 #ifdef USETEXT
 struct GOS_PointButton : public GOS_StyledButton
 {
-    //GOS_PointButton is equals radio button in html
     GOS_PointButton()
     {
         Name = "PointButton";
@@ -81,11 +80,10 @@ struct GOS_TextInputBox : public GOS_Button
 {
 	char LastChar = ' ';
 	int LastCharTick = -150;
-    GOS_TextInputBox(int id)
+    GOS_TextInputBox()
     {
         Name = "TextInputBox";
         Text = "Input";
-        Id = id;
     }
     virtual void Draw(SDL_Renderer* _r) override
     {

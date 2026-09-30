@@ -122,9 +122,9 @@ TextBox->Text = "New text";
 - Inherits GOS_Button
 - Need a id to init
 ```
-GOS_TextInputBox *tib = new GOS_TextInputBox(1); // Replace 1 with id that need
+GOS_TextInputBox *tib = new GOS_TextInputBox(); // Unical id creates automaticaly assign when adding to GOS_GUI 
 std::cout << tib->Name; // InputTextBox
-std::cout << tib->Id; // 1
+std::cout << tib->Id; // First free id in GOS_GUI (for example tib->Id = 5)
 std::cout << tib->Text; // [Text that stored in InputBox]
 ```
 ---
