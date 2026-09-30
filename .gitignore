@@ -3,8 +3,8 @@
 *.jpeg
 *.log
 *.tmp
-test
 SDL*
+resources*
 *.secret
 *.dev
 .dev*
