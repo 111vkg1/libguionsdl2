@@ -131,7 +131,7 @@ std::cout << tib->Text; // [Text that stored in InputBox]
 ## USETEXTURES Elements
 ### GOS_TexturedBox
 - Inherits GOS_StyledBox
-- Store Texture (SDL_Texture*), RenderType (char)
+- Store Texture (SDL_Texture*), RenderType (GOS_RenderType)
 ```
 // Add texture to TexturedBox
 SDL_Surface* surf = IMG_Load("test.png");
@@ -148,4 +148,5 @@ texturedbox->RenderType = GOS_RenderType::Left; // or GOS_RenderType::Right // o
 ### GOS_TexturedButton
 - Inherits GOS_TexturedBox
 - Stores BorderSize (short)
+
 - RenderType and Texture equals to GOS_TexturedBox

@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     TTF_Init();
 	IMG_Init(IMG_INIT_PNG);
 	SDL_StartTextInput();    
-	Font = TTF_OpenFont("./Schiffbauer-Regular.otf", 20);
+	Font = TTF_OpenFont("../resources/Schiffbauer-Regular.otf", 20);
     window = SDL_CreateWindow("test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, 1, 0); 
     
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     text->Color = GOS_Color(220, 220, 220, 255);
 	text->Text = "Hello";
 	
-	SDL_Surface* surf = IMG_Load("test2.png");
+	SDL_Surface* surf = IMG_Load("../resources/test2.png");
 	GOS_TexturedBox *texture = new GOS_TexturedBox();
 	texture->Face = {0, 250, 100, 50};
 	texture->Color.SetAllTo(50);
