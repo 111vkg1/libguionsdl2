@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	tb->Texture = texture->Texture;
 	tb->RenderType = GOS_RenderType::Centered;
 
-	GOS_TextInputBox *ti = new GOS_TextInputBox(1);
+	GOS_TextInputBox *ti = new GOS_TextInputBox();
 	ti->Face = {0, 450, 100, 50};
 	ti->Color.SetAllTo(46);
 	ti->Color.b = 255;

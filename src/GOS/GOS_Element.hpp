@@ -16,7 +16,7 @@ struct GOS_Element
 	}
     virtual bool MouseOn(int x, int y)
     {
-		return x >= Face.x && y >= Face.y && x <= Face.x + Face.h && y <= Face.y + Face.h;
+		return x >= Face.x && y >= Face.y && x <= Face.x + Face.w && y <= Face.y + Face.h;
     }
     virtual void Draw(SDL_Renderer* _r)
     {
