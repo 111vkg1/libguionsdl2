@@ -64,11 +64,28 @@ int main(int argc, char* argv[])
 	om->Face = {150, 50, 100, 50};
 	om->OpenedFace = {150, 50, 100, 150};
 	om->Color.SetAllTo(150);
+	GOS_RadioButton *rb1 = new GOS_RadioButton();
+	rb1->Color.SetRandom();
+	rb1->ActiveColor.SetRandom();
+	rb1->Face = {175, 175, 10, 10};
+	GOS_RadioButton *rb2 = new GOS_RadioButton();
+	rb2->Color.SetRandom();
+	rb2->Color.SetRandom();
+	rb2->Face = {195, 175, 10, 10};
+	GOS_RadioButton *rb3 = new GOS_RadioButton();
+	rb3->Color.SetRandom();
+	rb3->Color.SetRandom();
+	rb3->Face = {215, 175, 10, 10};
+
+
 	GOS_Box *om_bx= new GOS_Box();
 	om_bx->Face = {150, 100, 100, 50};
 	om_bx->Color.SetAllTo(45);
 	om_bx->Visible = false;
 	om->AddElement(om_bx);
+	om->AddElement(rb1);
+	om->AddElement(rb2);
+	om->AddElement(rb3);
 
 	GOS_ScrollingMenu *sm = new GOS_ScrollingMenu();
 	sm->Face = {250, 50, 125, 75};

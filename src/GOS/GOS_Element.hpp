@@ -10,6 +10,8 @@ struct GOS_Element
     bool Active = false;
     GOS_Color Color = {255, 255, 255, 255};
     SDL_Rect Face = {0,0,0,0};
+	GOS_Element *Parent = nullptr;
+	std::vector<std::unique_ptr<GOS_Element>> Childs;
     virtual ~GOS_Element() {};
 	virtual void Update(int x, int y, SDL_Event ev)
 	{
