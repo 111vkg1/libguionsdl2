@@ -33,7 +33,6 @@ struct GOS_Menu : public GOS_Element
 		element->Parent = this;
 		this->Childs.push_back(std::unique_ptr<GOS_Element>(element));
 	}
-
 	virtual int GetActiveId()
 	{
 		for(auto& child : this->Childs){
@@ -42,6 +41,16 @@ struct GOS_Menu : public GOS_Element
 			}
 		}
 		return -1;
+	}
+	virtual GOS_Element* GetByName(std::string name)
+	{
+		if(!StoresName(name)) return nullptr;
+		for(auto& child : this->Childs) {
+			if(child && child->GetName() == name) {
+				return child.get();
+			}
+		}
+		return nullptr;
 	}
 };
 
