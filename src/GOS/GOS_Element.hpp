@@ -8,6 +8,8 @@ struct GOS_Element
     std::string Text = "None";
     int Id = 0;
     bool Active = false;
+	bool Dragable = false;
+	bool Dragging = false;
     GOS_Color Color = {255, 255, 255, 255};
     SDL_Rect Face = {0,0,0,0};
 	GOS_Element *Parent = nullptr;

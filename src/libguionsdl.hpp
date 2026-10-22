@@ -37,6 +37,7 @@ SDL_Color TextColor = {0,0,0,255};
 #include<GOS/GOS_Element.hpp>
 #include<GOS/GOS_Box.hpp>
 #include<GOS/GOS_Button.hpp>
+#include<GOS/GOS_Meter.hpp>
 
 #ifdef USETEXT
 
@@ -203,7 +204,6 @@ struct GOS_GUI
 		}
 		#endif
     }
-
 };
 
 #endif // LIBGUIONSDL
